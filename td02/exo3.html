@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercice 3</title>
+</head>
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: "http://www.labri.fr/perso/pbiasutt/Cours/KDJS/TD02/functions.php",
+            dataType: "script"
+        });
+
+        $('#test').submit(function (event) {
+            event.preventDefault();
+            alert(isPrime($('[name="texte"]').val()));
+            return false;
+        });
+    });
+</script>
+<body>
+<form id="test">
+    <input type="text" name="texte">
+    <input type="submit" value="envoyer">
+</form>
+<p></p>
+</body>
+</html>

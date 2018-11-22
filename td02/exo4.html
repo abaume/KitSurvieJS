@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercice 4</title>
+</head>
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: "http://www.labri.fr/perso/pbiasutt/Cours/KDJS/TD02/characters.php",
+            dataType: "json",
+            success: function (data) {
+                data.forEach(function (d) {
+                    var ul = document.createElement("ul")
+                    $('body').append(ul)
+                    var id = document.createElement("li")
+                    var name = document.createElement("li")
+                    name.append(d.name);
+                    id.append(d.id);
+                    ul.append(id);
+                    ul.append(name);
+                })
+            }
+        });
+    });
+</script>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercice 2</title>
+</head>
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+
+
+    function clicbutton1 () {
+        $('#conteneur').load('http://www.labri.fr/perso/pbiasutt/Cours/KDJS/TD02/exo1.php div#conteneur1', function () {
+            var $loading = $('#loadingDiv').hide();
+            $(document)
+                .ajaxStart(function () {
+                    $loading.show();
+                })
+                .ajaxStop(function () {
+                    $loading.hide();
+                });
+
+        });
+    }
+
+    function clicbutton2 () {
+        $('#conteneur').load('http://www.labri.fr/perso/pbiasutt/Cours/KDJS/TD02/exo1.php div#conteneur2', function () {
+            var $loading = $('#loadingDiv').hide();
+            $(document)
+                .ajaxStart(function () {
+                    $loading.show();
+                })
+                .ajaxStop(function () {
+                    $loading.hide();
+                });
+
+        });
+
+    }
+
+</script>
+<body>
+<button id="button1" onclick="clicbutton1()">Clic moi</button>
+<button id="button2" onclick="clicbutton2()">Clic moi</button>
+<div id="conteneur"></div>
+<div id="loadingDiv" hidden>patate</div>
+</body>
+</html>

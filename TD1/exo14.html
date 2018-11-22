@@ -1,0 +1,72 @@
+<!-- KIT DE SURVIE JS - IUT INFORMATIQUE BORDEAUX -->
+<!DOCTYPE html>
+<head>
+
+    <meta charset="utf-8" />
+
+    <title>Exercice 14</title>
+    <meta name="description" content="Description de la page">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+
+    <style>
+    	body{ font-family: 'Quicksand', sans-serif; }
+	</style>
+
+    <script src="jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+    	    function Utilisateur(nom, prenom, age, sexe, description) {
+                this.nom = nom;
+                this.prenom = prenom;
+                this.age = age;
+                this.sexe = sexe;
+                this.description = description;
+
+                this.afficher = function () {
+                    console.log("Nom: " + this.nom
+                    + " Prenom: " + this.prenom
+                    + " Age: " + this.age
+                    + " Sexe: " + this.sexe
+                    + " Description: " + this.description)
+                }
+            }
+
+            $('form').submit(function (event) {
+                event.preventDefault();
+                var user = new Utilisateur(
+                    $('[name="nom"]').val(),
+                    $('[name="prenom"]').val(),
+                    $('[name="age"]').val(),
+                    $('[name="sexe"]').val(),
+                    $('#description').val(),
+                );
+                user.afficher();
+            })
+
+    	});
+   	</script>
+</head>
+<body>
+<div class="formulaire">
+    <h4>Un formulaire</h4>
+    <form action="#" method="get">
+        <input type="text" name="nom" placeholder="Nom" value="DUpont"/>
+        <br />
+        <input type="text" name="prenom" placeholder="Prénom" />
+        <br />
+        <input type="number" name="age" placeholder="Age" />
+        <br />
+        <label for="sexe">Sexe</label><br />
+        <select name="sexe" id="sexe">
+            <option>M</option>
+            <option>F</option>
+        </select>
+        <br />
+        <textarea id="description" name="description" placeholder="description"></textarea>
+        <br />
+        <input type="submit" onsubmit="return false"/>
+    </form>
+</div>
+</body>
+
+</html>

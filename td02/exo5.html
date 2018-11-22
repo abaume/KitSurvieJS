@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercice 5</title>
+</head>
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#test').submit(function (event) {
+            event.preventDefault();
+            $('ul').remove()
+            var url;
+            switch ($('[name="value"]').val()) {
+                case "name":
+                    url = "https://geo.api.gouv.fr/communes?nom="+ $('[name = "texte"]').val() +"&fields=nom,codesPostaux,codeDepartement&format=json&geometry=centre";
+                    break
+                case "cp":
+                    url = "https://geo.api.gouv.fr/communes?codePostal=" + $('[name = "texte"]').val() + "&fields=nom,codesPostaux,codeDepartement&format=json&geometry=centre";
+                    break;
+                case "cd":
+                    url = "https://geo.api.gouv.fr/communes?codeDepartement=" + $('[name = "texte"]').val() + "&fields=nom,codesPostaux,codeDepartement&format=json&geometry=centre";
+                    break;
+                default: break
+            }
+
+            $.ajax({
+                url: url,
+                dataType: "json",
+                success: function (d) {
+                    d.forEach(function (d) {
+                        var ul = document.createElement("ul")
+                        $('body').append(ul)
+                        var cd = document.createElement("li")
+                        var name = document.createElement("li")
+                        var cp = document.createElement("li")
+                        name.append("nom: " + d.nom);
+                        cd.append("code département: " + d.codeDepartement);
+                        cp.append("code postal: " + d.codesPostaux[0]);
+                        ul.append(cd);
+                        ul.append(name);
+                        ul.append(cp);
+                    })
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
+<body>
+<form id="test">
+    <select name="value">
+        <option value="name">Nom</option>
+        <option value="cp">Code Postal</option>
+        <option value="cd">Code département</option>
+    </select>
+    <input type="text" name="texte">
+    <input type="submit" value="envoyer">
+</form>
+</body>
+</html>
