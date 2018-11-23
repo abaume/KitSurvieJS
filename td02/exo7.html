@@ -1,122 +1,148 @@
 <!DOCTYPE html>
 <head>
 
-        <meta charset="utf-8" />
+	<meta charset="utf-8" />
 
-    <title>Kit de Survie JS</title>
-    <meta name="description" content="">
+	<title>Kit de Survie JS</title>
+	<meta name="description" content="">
 
-    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 
-    <style>
-    	body{ font-family: 'Quicksand', sans-serif;
-    		margin: 0; }
+	<style>
+		body{ font-family: 'Quicksand', sans-serif;
+			margin: 0; }
 
-    	.leftPanel{
-    		float: left;
-    		width: 200px;
-    		padding: 25px;
-    		background-color: #F9F9F9;
-    	}
-
-    	.leftPanel input[type=text]{   width: 178px; border: 1px solid #C1C2CC; padding: 10px; font-size: 16px; }
-    	.leftPanel input[type=submit]{ width: 200px; border: none; background-color: orange; color: white; padding: 10px; margin-top: 10px; text-transform: uppercase; font-size: 14px;}
-    	.leftPanel input[type=submit]:hover{ cursor: pointer; }
-    	.leftPanel form{ border-bottom: 1px solid #F1F1F1; padding-bottom: 10px; margin-bottom: 10px;}
-
-    	.leftPanel a{color: #C1C2CC; }
-
-
-
-    	.centerPanel{padding: 25px; margin-left: 250px; }
-	</style>
-
-    <script src="jquery-3.2.1.min.js"></script>
-    <script type="text/javascript">
-		var Caracter = {
-		    name: '',
-			id: '',
-
-			init: function (id, name) {
-				this.name = name;
-				this.id = id;
-            },
-
-            chargerDonnees: function () {
-                $.ajax({
-                    //url: "https://anapioficeandfire.com/api/characters/" + this.id,
-					url: "johnSnow.json",
-                    dataType: "json",
-                    success: function (data) {
-                        data.forEach(function (d) {
-							alert("la")
-                        })
-                    }
-                });
-            }
+		.leftPanel{
+			float: left;
+			width: 200px;
+			padding: 25px;
+			background-color: #F9F9F9;
 		}
 
-		const caracters = [];
+		.leftPanel input[type=text]{   width: 178px; border: 1px solid #C1C2CC; padding: 10px; font-size: 16px; }
+		.leftPanel input[type=submit]{ width: 200px; border: none; background-color: orange; color: white; padding: 10px; margin-top: 10px; text-transform: uppercase; font-size: 14px;}
+		.leftPanel input[type=submit]:hover{ cursor: pointer; }
+		.leftPanel form{ border-bottom: 1px solid #F1F1F1; padding-bottom: 10px; margin-bottom: 10px;}
 
-    	$(document).ready(function(){
-            $.ajax({
-                url: "http://www.labri.fr/perso/pbiasutt/Cours/KDJS/TD02/characters.php",
-                dataType: "json",
-                success: function (data) {
-                    data.forEach(function (d) {
-                        let c = Object.create(Caracter);
-                        c.init(d.id, d.name)
-						caracters[d.id] = c;
-                    })
-                }
-            });
+		.leftPanel a{color: #C1C2CC; }
 
-            $('[type = "text"]').keydown(() => {
-				let carac = caracters.filter(function (e) {
-				    let nb = $('[type = "text"]').val().length;
-				    let name = e.name.substring(0, nb);
-					return name === $('[type = "text"]').val()
-                });
-                $('ul').empty();
-				carac.forEach((elem) => {
-                    addCaracterToList(elem);
-                })
 
-                $('ul>li>a').bind("click", function () {
-                    caracters[$(this).attr("data-id")].chargerDonnees()
-                })
-			})
-    	});
 
-        function addCaracterToList(data)
-        {
-            var a = document.createElement("a");
-            var li = document.createElement("li");
-            a.setAttribute("href", "#");
-            a.setAttribute("data-id", data.id);
-            a.append(data.name)
-            li.append(a)
-            $(".leftPanel>ul").prepend(li)
+		.centerPanel{padding: 25px; margin-left: 250px; }
+	</style>
+
+	<script src="jquery-3.2.1.min.js"></script>
+	<script type="text/javascript">
+      var Caracter = {
+        name: '',
+        id: '',
+        gender: '',
+        born: '',
+        died: '',
+
+        init: function (id, name) {
+          this.name = name;
+          this.id = id;
+        },
+
+        chargerDonnees: function () {
+          $.ajax({
+            url: "https://anapioficeandfire.com/api/characters/" + this.id,
+            dataType: "json",
+            beforeSend: function () {
+              $('.centerPanel').append('chargement des données ...')
+			},
+            success: function (data) {
+              $('.centerPanel').empty();
+
+              this.name = data.name
+              this.gender = data.gender
+			  this.born = data.born
+			  this.died = data.died
+
+              let div = document.createElement("div")
+              let name = document.createElement("h4")
+              name.append(this.name)
+              let gender = document.createElement("p")
+              gender.append("sexe: " + (this.gender ? this.gender : "inconnu"))
+              let born = document.createElement("p")
+              born.append("Naissance: " + (this.born ? this.born : "inconnue"))
+              let die = document.createElement("p")
+              die.append("Décès: " + (this.died ? this.died : "inconnu"))
+
+			  div.append(name)
+			  div.append(gender)
+			  div.append(born)
+			  div.append(die)
+
+              $('.centerPanel').append(div)
+            }
+          });
         }
-   	</script>
+      }
+
+      const caracters = [];
+
+      $(document).ready(function(){
+        $.ajax({
+          url: "http://www.labri.fr/perso/pbiasutt/Cours/KDJS/TD02/characters.php",
+          dataType: "json",
+          success: function (data) {
+            data.forEach(function (d) {
+              let c = Object.create(Caracter);
+              c.init(d.id, d.name)
+              caracters[d.id] = c;
+            })
+          }
+        });
+
+        $('[type = "text"]').keydown(() => {
+          let carac = caracters.filter(function (e) {
+            let nb = $('[type = "text"]').val().length;
+            let name = e.name.substring(0, nb);
+            return name === $('[type = "text"]').val()
+          });
+          $('ul').empty();
+          carac.forEach((elem) => {
+            addCaracterToList(elem);
+          })
+
+          $('ul>li>a').bind("click", function () {
+            $('.centerPanel').empty();
+            caracters[$(this).attr("data-id")].chargerDonnees()
+          })
+        })
+      });
+
+      function addCaracterToList(data)
+      {
+        var a = document.createElement("a");
+        var li = document.createElement("li");
+        a.setAttribute("href", "#");
+        a.setAttribute("data-id", data.id);
+        a.append(data.name)
+        li.append(a)
+        $(".leftPanel>ul").prepend(li)
+      }
+	</script>
 </head>
 <body>
-	<div class="leftPanel">
-		<form action="#">
-			<input type="text" name="search" placeholder="Jon Snow ..." />
-		</form>
-		Résultats:
-		<ul>
-			<li><a href="#" data-id="X">Résultat 1</a></li>
-			<li><a href="#" data-id="X">Résultat 2</a></li>
-			<li><a href="#" data-id="X">Résultat 3</a></li>
-			<li><a href="#" data-id="X">Résultat 4</a></li>
-		</ul>
-	</div>
+<div class="leftPanel">
+	<form action="#">
+		<input type="text" name="search" placeholder="Jon Snow ..." />
+	</form>
+	Résultats:
+	<ul>
+		<li><a href="#" data-id="X">Résultat 1</a></li>
+		<li><a href="#" data-id="X">Résultat 2</a></li>
+		<li><a href="#" data-id="X">Résultat 3</a></li>
+		<li><a href="#" data-id="X">Résultat 4</a></li>
+	</ul>
+</div>
 
-	<div class="centerPanel">
-		Résultat
-	</div>
+<div class="centerPanel">
+	Résultat
+</div>
 </body>
 
 </html>
