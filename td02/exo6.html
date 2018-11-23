@@ -26,7 +26,10 @@
 
 		.leftPanel a{color: #C1C2CC; }
 
-
+		.meteo {
+			display: inline-block;
+			width: 100px;
+		}
 
 		.centerPanel{padding: 25px; margin-left: 250px; }
 	</style>
@@ -41,29 +44,19 @@
                     dataType: "json",
                     success: function (data) {
 						data = JSON.parse(data.body)[0];
+						addCityToList(data);
 
-                        var a = document.createElement("a");
-                        var li = document.createElement("li");
-                        a.setAttribute("data-id", data.woeid);
-                        a.setAttribute("href", "#");
-						a.append(data.title)
-                        li.append(a)
-                        $(".leftPanel>ul").prepend(li)
-                        if ($("ul>li").length > 4) {
-                            $("ul li:last-child").remove()
-                        }
-                        $('ul>li>a').bind("click", function (data) {
+                        $('ul>li>a').bind("click", function () {
                             $.ajax({
                                 url: "https://cors-proxy.htmldriven.com/?url=https://www.metaweather.com/api/location/" + $(this).attr("data-id"),
                                 dataType: "json",
                                 success: function (data) {
-                                    data = JSON.parse(data.body).consolidated_weather[0];
-									var ul = document.createElement("ul")
-									var li = document.createElement("li")
-									li.append("Météo" + data.weather_state_abbr)
-									ul.append(li);
+                                    data = JSON.parse(data.body).consolidated_weather;
+                                    removeResult()
 
-									$('.centerPanel').append(ul);
+                                    for (let i = 0; i < 6 || i < data.length; i++) {
+                                        addWeatherDay(data, i)
+                                    }
                                 }
                             })
                         })
@@ -71,6 +64,44 @@
                 });
             });
         });
+
+        function addWeatherDay(data, i)
+		{
+            var div = document.createElement("div")
+            var weather = document.createElement("h4")
+            weather.append(data[i].weather_state_name)
+            var max = document.createElement("p")
+            max.append(parseInt(data[i].max_temp))
+            var min = document.createElement("p")
+            min.append(parseInt(data[i].min_temp))
+            var img = document.createElement("img")
+            img.setAttribute("src", "https://www.metaweather.com/static/img/weather/png/64/" + data[i].weather_state_abbr + ".png")
+
+            div.append(weather);
+            div.append(img);
+            div.append(max);
+            div.append(min);
+            div.classList.add('meteo')
+
+            $('.centerPanel').append(div);
+        }
+        function addCityToList(data)
+		{
+            var a = document.createElement("a");
+            var li = document.createElement("li");
+            a.setAttribute("data-id", data.woeid);
+            a.setAttribute("href", "#");
+            a.append(data.title)
+            li.append(a)
+            $(".leftPanel>ul").prepend(li)
+            if ($("ul>li").length > 4) {
+                $("ul li:last-child").remove()
+            }
+		}
+		function removeResult()
+		{
+		    $('.centerPanel').empty();
+		}
 	</script>
 </head>
 <body>
