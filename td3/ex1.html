@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercice 1</title>
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css">
+</head>
+<style>
+    .bords-noirs {
+        border:1px solid #2b2b2b;
+        width: 60%;
+        height: 200px;
+    }
+    .fond-rouge {
+        background-color: #E80612;
+        width: 80%;
+        height: 150px;
+    }
+</style>
+<script src="jquery-3.2.1.min.js"></script>
+<script src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('.ui-draggable').draggable({
+      containment: 'parent',
+      drag: function (event, ui) {
+        $('#coordonnees').empty()
+        $('#coordonnees').append("Left: " + ui.position.left, " Top: " + ui.position.top)
+      }
+    });
+    let result = '';
+      $( "#sortable" ).sortable({
+      update: function(event, ui) {
+        result = $(this).sortable('toArray');
+      }
+    });
+    $("#button").on("click", function ()  {
+      $("#order").empty()
+      $("#order").append(result);
+    });
+    $( "#sortable" ).disableSelection();
+  });
+</script>
+<body>
+<div class="ui-draggable-handle bords-noirs">
+    <div class="ui-draggable fond-rouge"></div>
+</div>
+<div id="coordonnees"></div>
+<div id="liste">
+    <ul id="sortable">
+        <li id="1" class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1</li>
+        <li id="2" class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 2</li>
+        <li id="3" class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 3</li>
+        <li id="4" class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 4</li>
+        <li id="5" class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 5</li>
+        <li id="6" class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 6</li>
+    </ul>
+    <button id="button">Clic MOA</button>
+</div>
+<div id="order">
+
+</div>
+</body>
+</html>
