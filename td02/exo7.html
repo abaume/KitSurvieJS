@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <head>
- 
+
         <meta charset="utf-8" />
- 
+
     <title>Kit de Survie JS</title>
     <meta name="description" content="">
- 
+
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 
     <style>
-    	body{ font-family: 'Quicksand', sans-serif; 
+    	body{ font-family: 'Quicksand', sans-serif;
     		margin: 0; }
 
     	.leftPanel{
@@ -33,9 +33,71 @@
 
     <script src="jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
+		var Caracter = {
+		    name: '',
+			id: '',
+
+			init: function (id, name) {
+				this.name = name;
+				this.id = id;
+            },
+
+            chargerDonnees: function () {
+                $.ajax({
+                    //url: "https://anapioficeandfire.com/api/characters/" + this.id,
+					url: "johnSnow.json",
+                    dataType: "json",
+                    success: function (data) {
+                        data.forEach(function (d) {
+							alert("la")
+                        })
+                    }
+                });
+            }
+		}
+
+		const caracters = [];
+
     	$(document).ready(function(){
-    		// Ecrire les scripts ici
+            $.ajax({
+                url: "http://www.labri.fr/perso/pbiasutt/Cours/KDJS/TD02/characters.php",
+                dataType: "json",
+                success: function (data) {
+                    data.forEach(function (d) {
+                        let c = Object.create(Caracter);
+                        c.init(d.id, d.name)
+						caracters[d.id] = c;
+                    })
+                }
+            });
+
+            $('[type = "text"]').keydown(() => {
+				let carac = caracters.filter(function (e) {
+				    let nb = $('[type = "text"]').val().length;
+				    let name = e.name.substring(0, nb);
+					return name === $('[type = "text"]').val()
+                });
+                $('ul').empty();
+				carac.forEach((elem) => {
+                    addCaracterToList(elem);
+                })
+
+                $('ul>li>a').bind("click", function () {
+                    caracters[$(this).attr("data-id")].chargerDonnees()
+                })
+			})
     	});
+
+        function addCaracterToList(data)
+        {
+            var a = document.createElement("a");
+            var li = document.createElement("li");
+            a.setAttribute("href", "#");
+            a.setAttribute("data-id", data.id);
+            a.append(data.name)
+            li.append(a)
+            $(".leftPanel>ul").prepend(li)
+        }
    	</script>
 </head>
 <body>
@@ -56,5 +118,5 @@
 		Résultat
 	</div>
 </body>
- 
+
 </html>
