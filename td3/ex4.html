@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercice 4</title>
+
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+<div ng-app="app01" ng-controller="controlleur01">
+    <ng-form>
+        <label>Nombre 1: </label><input type="text" ng-model="nb1">
+        <label>Nombre 2: </label><input type="text" ng-model="nb2">
+        <select
+                ng-model="operator"
+        >
+            <option ng-repeat="op in operators">{{ op }}</option>
+        </select>
+    </ng-form>
+
+    <p>{{nb1 + operator + nb2}} = {{resultat()}}</p>
+</div>
+<script>
+    var app = angular.module("app01", []);
+    app.controller("controlleur01", function($scope){
+        $scope.nb1 = 0;
+        $scope.nb2 = 0;
+        $scope.operator = "+";
+        $scope.operators = ["+", "-", "*", "/"];
+        $scope.resultat = function calcul() {
+            switch ($scope.operator) {
+                case "+": return parseInt($scope.nb1) + parseInt($scope.nb2);
+                case "-": return parseInt($scope.nb1) - parseInt($scope.nb2);
+                case "*": return parseInt($scope.nb1) * parseInt($scope.nb2);
+                case "/": return parseInt($scope.nb1) / parseInt($scope.nb2);
+            }
+        }
+    });
+
+</script>
+</body>
+</html>
