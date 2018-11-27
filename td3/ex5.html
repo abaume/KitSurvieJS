@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercice 5</title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+<div ng-app="app5" ng-controller="controller5">
+    <ul>
+        <li ng-repeat="p in pokemons">{{p.ename}}</li>
+    </ul>
+</div>
+<script>
+    var app = angular.module("app5", []);
+    app.controller("controller5", function($scope, $http){
+        $scope.pokemons = [];
+        $http.get("https://raw.githubusercontent.com/fanzeyi/Pokemon-DB/master/pokedex.json")
+            .then(function(response){
+                response.data.forEach(function (res) {
+                    $scope.pokemons.push(res)
+                })
+        });
+    });
+
+</script>
+</body>
+</html>
