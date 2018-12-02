@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercice 6 - Gestion des erreurs formulaire avec angular</title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+<div ng-app="app6" ng-controller="controlleur6">
+    <form name="formulaire" ng-submit="submit()" novalidate">
+        <div>
+            <label>Nom</label>
+            <input name="name" type="text" ng-model="name" required>
+            <span class="ui-state-error-text" ng-show="formulaire.name.$error.required">Merci de renseigner votre nom</span>
+        </div>
+        <div>
+            <label for="mail">Email</label>
+            <input name="mail" type="email" ng-model="mail" class="form-control" id="mail" required>
+            <span class="text-danger" ng-show="formulaire.mail.$error.required">Merci de renseigner votre mail</span>
+            <span class="text-danger" ng-show="formulaire.mail.$error.email">Votre mail n'est pas valide</span>
+        </div>
+        <div>
+            <label for="password">Mot de passe</label>
+            <input name="password" type="password" ng-model="password" class="form-control" id="password" required>
+            <span class="text-danger" ng-show="formulaire.password.$error.required">Merci de renseigner un mot de passe</span>
+        </div>
+        <div>
+            <label for="rap_password">Mot de passe</label>
+            <input name="rap_password" type="password" ng-model="rap_password" class="form-control" id="rap_password" required equals-to="formulaire.password">
+            <span class="text-danger" ng-show="!formulaire.rap_password.$error.required && formulaire.rap_password.$error.equalsTo">Vos mots de passe sont différents</span>
+        </div>
+        <input type="submit" value="Envoyer" ng-disabled="formulaire.$invalid"/>
+    </form>
+</div>
+<script>
+    var app = angular.module('app6', [])
+        .directive('equalsTo', [function () {
+            return {
+                restrict: 'A', // S'utilise uniquement en tant qu'attribut
+                scope: true,
+                require: 'ngModel',
+                link: function (scope, elem, attrs, control) {
+                    var check = function () {
+                        //Valeur du champs courant
+                        var v1 = scope.$eval(attrs.ngModel); // attrs.ngModel = "ConfirmPassword"
+                        //valeur du champ à comparer
+                        var v2 = scope.$eval(attrs.equalsTo).$viewValue; // attrs.equalsTo = "Password"
+                        return v1 === v2;
+                    };
+
+                    scope.$watch(check, function (isValid) {
+                        // Défini si le champ est valide
+                        control.$setValidity("equalsTo", isValid);
+                    });
+                }
+            };
+        }]);
+
+    app.controller("controlleur6", function($scope){
+        $scope.name = "";
+        $scope.mail = "";
+        $scope.password = "";
+        $scope.rap_password = "";
+        $scope.submit = function () {
+            alert("j'ai tout envoyé!")
+        }
+    });
+
+</script>
+</body>
+</html>
